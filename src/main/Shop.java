@@ -220,11 +220,10 @@ public class Shop {
 	/**
 	 * write inventory from file
 	 */
-	private boolean writeInventory() {
-		return false;
+	public boolean writeInventory() {
+		return dao.writeInventory(inventory);
 	}
 	
-
 	/**
 	 * show current total cash
 	 */
