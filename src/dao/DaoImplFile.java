@@ -105,4 +105,62 @@ public class DaoImplFile implements Dao {
 		return inventory;
 	}
 
+	@Override
+	public boolean writeInventory(ArrayList<Product> inventory) {
+		// define file name based on date
+		LocalDate myObj = LocalDate.now();
+		String fileName = "inventory_" + myObj.toString() + ".txt";
+
+		// locate file, path and name
+		File f = new File(System.getProperty("user.dir") + File.separator + "files" + File.separator + fileName);
+
+		try {
+			// wrap in proper classes
+			FileWriter fw;
+			fw = new FileWriter(f);
+			PrintWriter pw = new PrintWriter(fw);
+
+			// write line by line
+			int counterProduct = 0;
+			for (Product product : inventory) {
+				// format first line TO BE -> 1;Product:Manzana;Stock:10;
+				StringBuilder firstLine = new StringBuilder(
+						(counterProduct + 1) + ";Product:" + product.getName() + ";Stock:" + product.getStock() + ";");
+				pw.write(firstLine.toString());
+				fw.write("\n");
+
+				// increment counter sales
+				counterProduct++;
+			}
+			// write count of products
+			pw.write("Total number of products:" + counterProduct + ";");
+			
+			// close files
+			pw.close();
+			fw.close();
+
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
+	@Override
+	public void addProduct(Product product) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void updateProduct(Product product) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteProduct(int id) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

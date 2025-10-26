@@ -1,0 +1,9 @@
+1;Product:Manzana;Stock:10;
+2;Product:Fresa;Stock:20;
+3;Product:Pera;Stock:15;
+4;Product:Naranja;Stock:30;
+5;Product:Platano;Stock:25;
+6;Product:Uva;Stock:12;
+7;Product:Leche;Stock:50;
+8;Product:Pan;Stock:40;
+Total number of products:8;
