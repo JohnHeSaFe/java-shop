@@ -16,4 +16,11 @@ public interface Dao {
 	public ArrayList<Product> getInventory();
 	
 	public boolean writeInventory(ArrayList<Product> products);
+	
+	public void addProduct(Product product);
+	
+	public void updateProduct(Product product);
+	
+	public void deleteProduct(int id);
+	
 }

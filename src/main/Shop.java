@@ -14,7 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import dao.DaoImplFile;
+import dao.DaoImplJDBC;
 
 public class Shop {
 	private Amount cash = new Amount(100.00);
@@ -27,7 +27,7 @@ public class Shop {
 
 	final static double TAX_RATE = 1.04;
 	
-	DaoImplFile dao = new DaoImplFile();
+	DaoImplJDBC dao = new DaoImplJDBC();
 
 	public Shop() {
 		inventory = new ArrayList<Product>();
