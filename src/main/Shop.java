@@ -484,17 +484,27 @@ public class Shop {
 	 * 
 	 * @param product
 	 */
-	public void addProduct(Product product) {
+	public boolean addProduct(Product product) {
 		if (isInventoryFull()) {
 			System.out.println("No se pueden añadir más productos, se ha alcanzado el máximo de " + inventory.size());
-			return;
+			return false;
 		}
-		dao.addProduct(product);
-		numberProducts++;
+		if (dao.addProduct(product)) {
+			numberProducts++;
+			return true;
+		}
+		return false;
 	}
 	
+	/**
+	 * add a product to inventory
+	 * 
+	 * @param product
+	 */
+	public boolean addStock(Product product) {
+		return dao.updateProduct(product);
+	}
 	
-
 	/**
 	 * check if inventory is full or not
 	 */

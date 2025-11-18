@@ -151,7 +151,7 @@ public class DaoImplJDBC implements Dao {
 	}
 
 	@Override
-	public void addProduct(Product product) {	
+	public boolean addProduct(Product product) {	
 		String query = "insert into Inventory (name, wholesaler_price, available, stock) values (?, ?, ?, ?)";
         
         try (PreparedStatement ps = connection.prepareStatement(query)){
@@ -160,22 +160,39 @@ public class DaoImplJDBC implements Dao {
             ps.setBoolean(3, product.isAvailable()); 
             ps.setInt(4, product.getStock());
             ps.executeUpdate();
+            return true;
         } catch (SQLException ex) {
             System.out.println("Error: Couldn't insert in inventory table");
             ex.printStackTrace();
+            return false;
         } 
 	}
 
 	@Override
-	public void updateProduct(Product product) {
-		// TODO Auto-generated method stub
+	public boolean updateProduct(Product product) {
+		String query = "update Inventory set name = ?, wholesaler_price = ?, available = ?, stock = ? where id = ?";
 		
+		try (PreparedStatement ps = connection.prepareStatement(query)) {
+	        ps.setString(1, product.getName());
+	        ps.setDouble(2, product.getWholesalerPrice().getValue());
+	        ps.setBoolean(3, product.isAvailable());
+	        ps.setInt(4, product.getStock());
+	        ps.setInt(5, product.getId()); 
+	        
+	        int rowsAffected = ps.executeUpdate();
+	        return rowsAffected > 0;
+	        
+	    } catch (SQLException e) {
+	        System.out.println("Error: Couldn't update product in DB");
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
 
 	@Override
-	public void deleteProduct(int id) {
+	public boolean deleteProduct(int id) {
 		// TODO Auto-generated method stub
-		
+		return false;
 	}
 
 }
