@@ -21,6 +21,11 @@ public class Product {
 		this.stock = stock;
 		totalProducts++;
 	}
+	
+	public Product(int id, String name, Amount wholesalerPrice, boolean available, int stock) {
+		this(name, wholesalerPrice, available, stock);
+		this.id = id;
+	}
 
 	public int getId() {
 		return id;
