@@ -489,7 +489,7 @@ public class Shop {
 			System.out.println("No se pueden añadir más productos, se ha alcanzado el máximo de " + inventory.size());
 			return;
 		}
-		inventory.add(product);
+		dao.addProduct(product);
 		numberProducts++;
 	}
 	
