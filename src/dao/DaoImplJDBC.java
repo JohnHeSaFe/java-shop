@@ -191,8 +191,19 @@ public class DaoImplJDBC implements Dao {
 
 	@Override
 	public boolean deleteProduct(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		String query = "delete from Inventory where id = ?";
+		
+		try (PreparedStatement ps = connection.prepareStatement(query)) {
+	        ps.setInt(1, id); 
+	        
+	        int rowsAffected = ps.executeUpdate();
+	        return rowsAffected > 0;
+	        
+	    } catch (SQLException e) {
+	        System.out.println("Error: Couldn't delete product in DB");
+	        e.printStackTrace();
+	        return false;
+	    }
 	}
 
 }

@@ -490,6 +490,7 @@ public class Shop {
 			return false;
 		}
 		if (dao.addProduct(product)) {
+			inventory.add(product);
 			numberProducts++;
 			return true;
 		}
@@ -503,6 +504,19 @@ public class Shop {
 	 */
 	public boolean addStock(Product product) {
 		return dao.updateProduct(product);
+	}
+	
+	/**
+	 * add a product to inventory
+	 * 
+	 * @param product
+	 */
+	public boolean removeProduct(Product product) {
+		if (dao.deleteProduct(product.getId())) {
+	        inventory.remove(product);
+	        return true;
+	    }
+	    return false;
 	}
 	
 	/**

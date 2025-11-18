@@ -225,9 +225,17 @@ public class ProductView extends JDialog implements ActionListener{
 							JOptionPane.ERROR_MESSAGE);
 					
 				} else {					
-					shop.getInventory().remove(product);
-					JOptionPane.showMessageDialog(null, "Producto eliminado", "Information",
-							JOptionPane.INFORMATION_MESSAGE);
+					boolean removeProductSuccess = shop.removeProduct(product);
+					
+					if (removeProductSuccess) {
+						JOptionPane.showMessageDialog(null, "Producto eliminado", "Information",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "No se pudo eliminar producto a la base de datos ", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
+					
+					
 					// release current screen
 					dispose();	
 				}
