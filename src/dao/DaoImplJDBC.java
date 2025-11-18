@@ -23,7 +23,7 @@ public class DaoImplJDBC implements Dao {
 		String pass = "";
 		try {
 			this.connection = DriverManager.getConnection(url, user, pass);
-			createTableInventory();
+			createTablesInventory();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error: Couldn't load DB");
@@ -32,8 +32,8 @@ public class DaoImplJDBC implements Dao {
 
 	}
 	
-	private void createTableInventory() {
-		String query = "create table if not exists Inventory ("
+	private void createTablesInventory() {
+		String queryIventory = "create table if not exists Inventory ("
                 + "id int primary key auto_increment, "
                 + "name varchar(100), "
                 + "wholesaler_price double, "
@@ -41,8 +41,19 @@ public class DaoImplJDBC implements Dao {
                 + "stock int"
                 + ");";
 		
+		String queryHistorical = "create table if not exists Historical_inventory ("
+                + "id int primary key auto_increment, "
+				+ "id_product int, "
+                + "name varchar(100), "
+                + "wholesaler_price double, "
+                + "available boolean, "
+                + "stock int, "
+                + "created_at timestamp default current_timestamp"
+                + ");";
+		
 		try (Statement stmt = connection.createStatement()){
-			stmt.executeUpdate(query);
+			stmt.executeUpdate(queryIventory);
+			stmt.executeUpdate(queryHistorical);
 		} catch (SQLException e) {
 			System.out.println("Error: Couldn't create table inventory in DB");
 			e.printStackTrace();
@@ -118,8 +129,25 @@ public class DaoImplJDBC implements Dao {
 
 	@Override
 	public boolean writeInventory(ArrayList<Product> products) {
-		// TODO Auto-generated method stub
-		return false;
+		String query = "insert into Historical_inventory (id_product, name, wholesaler_price, available, stock) values (?, ?, ?, ?, ?)";
+        
+        try (PreparedStatement ps = connection.prepareStatement(query)){
+        	for (Product product: products) {
+        		ps.setInt(1, product.getId()); 
+            	ps.setString(2, product.getName()); 
+                ps.setDouble(3, product.getWholesalerPrice().getValue()); 
+                ps.setBoolean(4, product.isAvailable()); 
+                ps.setInt(5, product.getStock());
+                ps.addBatch();
+        	}
+        	
+        	ps.executeBatch();
+        	return true;
+        } catch (SQLException ex) {
+            System.out.println("Error: Couldn't insert in inventory table");
+            ex.printStackTrace();
+            return false;
+        } 
 	}
 
 	@Override
@@ -134,6 +162,7 @@ public class DaoImplJDBC implements Dao {
             ps.executeUpdate();
         } catch (SQLException ex) {
             System.out.println("Error: Couldn't insert in inventory table");
+            ex.printStackTrace();
         } 
 	}
 
