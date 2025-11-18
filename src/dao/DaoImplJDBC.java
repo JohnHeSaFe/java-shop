@@ -5,8 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
+import model.Amount;
 import model.Employee;
 import model.Product;
 
@@ -21,11 +23,30 @@ public class DaoImplJDBC implements Dao {
 		String pass = "";
 		try {
 			this.connection = DriverManager.getConnection(url, user, pass);
+			createTableInventory();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+			System.out.println("Error: Couldn't load DB");
 			e.printStackTrace();
 		}
 
+	}
+	
+	private void createTableInventory() {
+		String query = "create table if not exists Inventory ("
+                + "id int primary key auto_increment, "
+                + "name varchar(100), "
+                + "wholesaler_price double, "
+                + "available boolean, "
+                + "stock int"
+                + ");";
+		
+		try (Statement stmt = connection.createStatement()){
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			System.out.println("Error: Couldn't create table inventory in DB");
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -65,8 +86,34 @@ public class DaoImplJDBC implements Dao {
 
 	@Override
 	public ArrayList<Product> getInventory() {
-			
-		return null;
+		String query = "select * from inventory";
+		
+		Statement stmt = null;
+		ResultSet rs = null;
+		Product product;
+		ArrayList<Product> products = new ArrayList<>();
+		
+		try {
+            stmt = connection.createStatement();
+            rs = stmt.executeQuery(query);
+            
+            while (rs.next()) {
+                product = new Product(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        new Amount(rs.getDouble("wholesaler_price")),
+                        rs.getBoolean("available"),
+                        rs.getInt("stock")
+                );
+                
+                products.add(product);
+            }
+        } catch (SQLException ex) {
+        	System.out.println("Error: Couldn't load data on table inventory in DB");
+        	ex.printStackTrace();
+        } 
+		
+		return products;
 	}
 
 	@Override
@@ -76,7 +123,7 @@ public class DaoImplJDBC implements Dao {
 	}
 
 	@Override
-	public void addProduct(Product product) {
+	public void addProduct(Product product) {	
 		// TODO Auto-generated method stub
 		
 	}

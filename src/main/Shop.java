@@ -24,14 +24,15 @@ public class Shop {
 //	private Sale[] sales;
 	private ArrayList<Sale> sales;
 	private int numberSales;
-
 	final static double TAX_RATE = 1.04;
 	
 	DaoImplJDBC dao = new DaoImplJDBC();
+	
 
 	public Shop() {
 		inventory = new ArrayList<Product>();
 		sales = new ArrayList<Sale>();
+		dao.connect();
 	}
 	
 	
