@@ -163,9 +163,17 @@ public class ProductView extends JDialog implements ActionListener{
 							new Amount(Double.parseDouble(textFieldPrice.getText())) ,
 							true,
 							Integer.parseInt(textFieldStock.getText()));
-					shop.addProduct(product);
-					JOptionPane.showMessageDialog(null, "Producto añadido ", "Information",
-							JOptionPane.INFORMATION_MESSAGE);
+
+					boolean addProductSuccess = shop.addProduct(product);
+					
+					if (addProductSuccess) {
+						JOptionPane.showMessageDialog(null, "Producto añadido ", "Information",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "No se pudo añadir producto a la base de datos ", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
+					
 					// release current screen
 					dispose();	
 				}
@@ -180,10 +188,28 @@ public class ProductView extends JDialog implements ActionListener{
 					JOptionPane.showMessageDialog(null, "Producto no existe ", "Error",
 							JOptionPane.ERROR_MESSAGE);
 					
-				} else {					
-					product.setStock(product.getStock() + Integer.parseInt(textFieldStock.getText()));
-					JOptionPane.showMessageDialog(null, "Stock actualizado ", "Information",
-							JOptionPane.INFORMATION_MESSAGE);
+				} else {			
+					int stockInput = Integer.parseInt(textFieldStock.getText());
+					
+					if (stockInput < 1) {
+						JOptionPane.showMessageDialog(null, "La cantidad stock debe ser un número positivo ", "Error",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					int nuevoStock = product.getStock() + stockInput;
+					product.setStock(nuevoStock);
+					
+					boolean addStockSuccess = shop.addStock(product);
+					
+					if (addStockSuccess) {
+						JOptionPane.showMessageDialog(null, "Stock actualizado ", "Information",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "No se pudo actualizar el stock en la base de datos ", "Error",
+								JOptionPane.ERROR_MESSAGE);
+					}
+					
 					// release current screen
 					dispose();	
 				}
