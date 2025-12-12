@@ -159,10 +159,37 @@ public class ProductView extends JDialog implements ActionListener{
 							JOptionPane.ERROR_MESSAGE);
 					
 				} else {
-					product = new Product(textFieldName.getText(), 
-							new Amount(Double.parseDouble(textFieldPrice.getText())) ,
-							true,
-							Integer.parseInt(textFieldStock.getText()));
+					String productName = textFieldName.getText();
+					
+					
+					if (productName.isEmpty()) {
+						JOptionPane.showMessageDialog(null, "Producto no puede tener nombre vacio ", "Error",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					Double productPrice;
+					int productStock;
+					try {
+						productPrice = Double.parseDouble(textFieldPrice.getText());
+						productStock = Integer.parseInt(textFieldStock.getText());
+						
+						if (productPrice < 0) {
+							JOptionPane.showMessageDialog(null, "Producto no puede tener precio negativo ", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+						if (productStock < 0) {
+							JOptionPane.showMessageDialog(null, "Producto no puede tener stock negativo ", "Error",
+									JOptionPane.ERROR_MESSAGE);
+							return;
+						}
+					} catch (NumberFormatException ex) {
+						JOptionPane.showMessageDialog(null, "Error en los datos numericos ", "Error",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					product = new Product(productName, new Amount(productPrice), true, productStock);
 
 					boolean addProductSuccess = shop.addProduct(product);
 					
