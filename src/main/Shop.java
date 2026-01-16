@@ -248,7 +248,7 @@ public class Shop {
 		System.out.print("Stock: ");
 		int stock = scanner.nextInt();
 
-		addProduct(new Product(name, new Amount(wholesalerPrice), true, stock));
+		addProduct(new Product(name, wholesalerPrice, true, stock));
 	}
 
 	/**
@@ -356,7 +356,7 @@ public class Shop {
 
 			if (product != null && product.isAvailable()) {
 				productAvailable = true;
-				totalAmount.setValue(totalAmount.getValue() + product.getPublicPrice().getValue());
+				totalAmount.setValue(totalAmount.getValue() + product.getPublicPrice());
 				product.setStock(product.getStock() - 1);
 				shoppingCart.add(product);
 				numberShopping++;

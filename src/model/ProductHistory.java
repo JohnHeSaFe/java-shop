@@ -1,0 +1,107 @@
+package model;
+
+import java.time.LocalDateTime;
+
+import jakarta.persistence.*;
+
+@Entity
+public class ProductHistory {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	
+	@Column(name = "is_available")
+    private boolean available;
+	
+	@Column(name = "created_at")
+    private LocalDateTime createdAt;
+	
+	@Column(name = "id_product")
+    private int idProduct;
+	
+	@Column(name = "product_name")
+    private String name;
+	
+	@Column(name = "public_price")
+    private double publicPrice;
+	
+	@Column(name = "stock_count")
+    private int stock;
+    
+    
+    public ProductHistory() {}
+    
+
+    public ProductHistory(int idProduct, String name, double publicPrice, boolean available, int stock) {
+        this.idProduct = idProduct;
+        this.name = name;
+        this.publicPrice = publicPrice;
+        this.available = available;
+        this.stock = stock;
+        this.createdAt = LocalDateTime.now(); 
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public double getIdProduct() {
+        return idProduct;
+    }
+
+    public void setIdProduct(int idProduct) {
+        this.idProduct = idProduct;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPublicPrice() {
+        return publicPrice;
+    }
+
+    public void setPublicPrice(double publicPrice) {
+        this.publicPrice = publicPrice;
+    }
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductHistory [id=" + id + ", idProduct=" + idProduct + ", name=" + name 
+               + ", publicPrice=" + publicPrice + ", available=" + available + ", stock=" + stock 
+               + ", createdAt=" + createdAt + "]";
+    }
+
+}
