@@ -112,7 +112,7 @@ public class DaoImplJDBC implements Dao {
                 product = new Product(
                         rs.getInt("id"),
                         rs.getString("name"),
-                        new Amount(rs.getDouble("wholesaler_price")),
+                        rs.getDouble("wholesaler_price"),
                         rs.getBoolean("available"),
                         rs.getInt("stock")
                 );
@@ -135,7 +135,7 @@ public class DaoImplJDBC implements Dao {
         	for (Product product: products) {
         		ps.setInt(1, product.getId()); 
             	ps.setString(2, product.getName()); 
-                ps.setDouble(3, product.getWholesalerPrice().getValue()); 
+                ps.setDouble(3, product.getWholesalerPrice()); 
                 ps.setBoolean(4, product.isAvailable()); 
                 ps.setInt(5, product.getStock());
                 ps.addBatch();
@@ -156,7 +156,7 @@ public class DaoImplJDBC implements Dao {
         
         try (PreparedStatement ps = connection.prepareStatement(query)){
         	ps.setString(1, product.getName()); 
-            ps.setDouble(2, product.getWholesalerPrice().getValue()); 
+            ps.setDouble(2, product.getWholesalerPrice()); 
             ps.setBoolean(3, product.isAvailable()); 
             ps.setInt(4, product.getStock());
             ps.executeUpdate();
@@ -174,7 +174,7 @@ public class DaoImplJDBC implements Dao {
 		
 		try (PreparedStatement ps = connection.prepareStatement(query)) {
 	        ps.setString(1, product.getName());
-	        ps.setDouble(2, product.getWholesalerPrice().getValue());
+	        ps.setDouble(2, product.getWholesalerPrice());
 	        ps.setBoolean(3, product.isAvailable());
 	        ps.setInt(4, product.getStock());
 	        ps.setInt(5, product.getId()); 

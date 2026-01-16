@@ -189,7 +189,7 @@ public class ProductView extends JDialog implements ActionListener{
 						return;
 					}
 					
-					product = new Product(productName, new Amount(productPrice), true, productStock);
+					product = new Product(productName, productPrice, true, productStock);
 
 					boolean addProductSuccess = shop.addProduct(product);
 					
