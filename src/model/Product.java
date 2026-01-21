@@ -11,22 +11,21 @@ public class Product {
 	@Column(name = "product_name")
     private String name;
 	
-	@Column(name = "public_price")
-    private double publicPrice;
-	
 	@Column(name = "wholesaler_price")
     private double wholesalerPrice;
 	
-	@Column(name = "is_available")
+	@Column(name = "available")
     private boolean available;
 	
-	@Column(name = "stock_count")
+	@Column(name = "stock")
     private int stock;
+	
+	@Transient
+    private double publicPrice;
     
     @Transient
     private static int totalProducts;
     
-    @Transient
     public final static double EXPIRATION_RATE=0.60;
     
     public Product() {}
@@ -62,8 +61,6 @@ public class Product {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	
 
 	public double getPublicPrice() {
 		return publicPrice;
