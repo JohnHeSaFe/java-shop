@@ -6,7 +6,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-
+import org.hibernate.query.Query;
 import org.hibernate.Session;
 import model.Employee;
 import model.Product;
@@ -63,8 +63,13 @@ public class DaoImplHibernate implements Dao {
 
 	@Override
 	public ArrayList<Product> getInventory() {
-		// TODO Auto-generated method stub
-		return null;
+		connect();
+		
+		String hql = "FROM Product";
+		
+		Query<Product> query = session.createQuery(hql, Product.class);
+		
+		return new ArrayList<Product>(query.list());
 	}
 
 	@Override
