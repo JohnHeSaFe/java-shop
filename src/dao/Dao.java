@@ -17,10 +17,10 @@ public interface Dao {
 	
 	public boolean writeInventory(ArrayList<Product> products);
 	
-	public boolean addProduct(Product product);
+	public void addProduct(Product product);
 	
-	public boolean updateProduct(Product product);
+	public void updateProduct(Product product);
 	
-	public boolean deleteProduct(int id);
+	public void deleteProduct(int id);
 	
 }

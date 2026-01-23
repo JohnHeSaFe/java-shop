@@ -142,6 +142,7 @@ public class DaoImplJDBC implements Dao {
         	}
         	
         	ps.executeBatch();
+        	
         	return true;
         } catch (SQLException ex) {
             System.out.println("Error: Couldn't insert in inventory table");
@@ -151,7 +152,7 @@ public class DaoImplJDBC implements Dao {
 	}
 
 	@Override
-	public boolean addProduct(Product product) {	
+	public void addProduct(Product product) {	
 		String query = "insert into Inventory (name, wholesaler_price, available, stock) values (?, ?, ?, ?)";
         
         try (PreparedStatement ps = connection.prepareStatement(query)){
@@ -160,16 +161,15 @@ public class DaoImplJDBC implements Dao {
             ps.setBoolean(3, product.isAvailable()); 
             ps.setInt(4, product.getStock());
             ps.executeUpdate();
-            return true;
         } catch (SQLException ex) {
             System.out.println("Error: Couldn't insert in inventory table");
             ex.printStackTrace();
-            return false;
+            return;
         } 
 	}
 
 	@Override
-	public boolean updateProduct(Product product) {
+	public void updateProduct(Product product) {
 		String query = "update Inventory set name = ?, wholesaler_price = ?, available = ?, stock = ? where id = ?";
 		
 		try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -179,30 +179,23 @@ public class DaoImplJDBC implements Dao {
 	        ps.setInt(4, product.getStock());
 	        ps.setInt(5, product.getId()); 
 	        
-	        int rowsAffected = ps.executeUpdate();
-	        return rowsAffected > 0;
-	        
 	    } catch (SQLException e) {
 	        System.out.println("Error: Couldn't update product in DB");
 	        e.printStackTrace();
-	        return false;
+	        return;
 	    }
 	}
 
 	@Override
-	public boolean deleteProduct(int id) {
+	public void deleteProduct(int id) {
 		String query = "delete from Inventory where id = ?";
 		
 		try (PreparedStatement ps = connection.prepareStatement(query)) {
 	        ps.setInt(1, id); 
-	        
-	        int rowsAffected = ps.executeUpdate();
-	        return rowsAffected > 0;
-	        
 	    } catch (SQLException e) {
 	        System.out.println("Error: Couldn't delete product in DB");
 	        e.printStackTrace();
-	        return false;
+	        return;
 	    }
 	}
 

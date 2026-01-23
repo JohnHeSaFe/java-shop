@@ -138,7 +138,7 @@ public class DaoImplFile implements Dao {
 			// close files
 			pw.close();
 			fw.close();
-
+			
 			return true;
 		} catch (IOException e) {
 			return false;
@@ -146,21 +146,21 @@ public class DaoImplFile implements Dao {
 	}
 
 	@Override
-	public boolean addProduct(Product product) {
+	public void addProduct(Product product) {
 		// TODO Auto-generated method stub
-		return false;
+		return;
 	}
 
 	@Override
-	public boolean updateProduct(Product product) {
+	public void updateProduct(Product product) {
 		// TODO Auto-generated method stub
-		return false;
+		return;
 	}
 
 	@Override
-	public boolean deleteProduct(int id) {
+	public void deleteProduct(int id) {
 		// TODO Auto-generated method stub
-		return false;
+		return;
 	}
 
 }
