@@ -14,7 +14,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import dao.DaoImplJDBC;
+import dao.DaoImplHibernate;
+import dao.Dao;
 
 public class Shop {
 	private Amount cash = new Amount(100.00);
@@ -26,7 +27,7 @@ public class Shop {
 	private int numberSales;
 	final static double TAX_RATE = 1.04;
 	
-	DaoImplJDBC dao = new DaoImplJDBC();
+	Dao dao = new DaoImplHibernate();
 	
 
 	public Shop() {
