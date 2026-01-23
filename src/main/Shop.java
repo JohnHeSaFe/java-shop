@@ -489,12 +489,14 @@ public class Shop {
 			System.out.println("No se pueden añadir más productos, se ha alcanzado el máximo de " + inventory.size());
 			return false;
 		}
-		if (dao.addProduct(product)) {
+		try {
+			dao.addProduct(product);
 			inventory.add(product);
-			numberProducts++;
 			return true;
+		} catch (Exception e) {
+			System.out.println("No se pudo añadir producto.");
+			return false;
 		}
-		return false;
 	}
 	
 	/**
@@ -503,7 +505,13 @@ public class Shop {
 	 * @param product
 	 */
 	public boolean addStock(Product product) {
-		return dao.updateProduct(product);
+		try {
+			dao.updateProduct(product);
+			return true;
+		} catch (Exception e) {
+			System.out.println("No se pudo actualizar el stock.");
+			return false;
+		}
 	}
 	
 	/**
@@ -512,11 +520,14 @@ public class Shop {
 	 * @param product
 	 */
 	public boolean removeProduct(Product product) {
-		if (dao.deleteProduct(product.getId())) {
-	        inventory.remove(product);
-	        return true;
-	    }
-	    return false;
+		try {
+			dao.deleteProduct(product.getId());
+			inventory.remove(product);
+			return true;
+		} catch (Exception e) {
+			System.out.println("No se pudo remover un producto.");
+			return false;
+		}
 	}
 	
 	/**
