@@ -80,7 +80,7 @@ public class DaoImplHibernate implements Dao {
 	}
 
 	@Override
-	public boolean addProduct(Product product) {
+	public void addProduct(Product product) {
 		connect();
 		
 		Transaction transaction = null;
@@ -90,17 +90,15 @@ public class DaoImplHibernate implements Dao {
 			session.save(product);
 			
 			transaction.commit();
-			return true;
 		} catch (Exception e) {
 			if (transaction != null) transaction.rollback();
 			
-			System.out.println("Error: couldn't add Product Hibernate");
-			return false;
+			throw new RuntimeException("Error: couldn't add Product Hibernate");
 		}
 	}
 
 	@Override
-	public boolean updateProduct(Product product) {
+	public void updateProduct(Product product) {
 		connect();
 		
 		Transaction transaction = null;
@@ -110,17 +108,15 @@ public class DaoImplHibernate implements Dao {
 			session.update(product);
 			
 			transaction.commit();
-			return true;
 		} catch (Exception e) {
 			if (transaction != null) transaction.rollback();
 			
-			System.out.println("Error: couldn't update Product Hibernate");
-			return false;
+			throw new RuntimeException("Error: couldn't update Product Hibernate");
 		}
 	}
 
 	@Override
-	public boolean deleteProduct(int id) {
+	public void deleteProduct(int id) {
 		connect();
 		
 		Transaction transaction = null;
@@ -131,16 +127,13 @@ public class DaoImplHibernate implements Dao {
 			
 			if (product != null) {
 				session.delete(product);
-				transaction.commit();
-				return true;
 			}
 			
-			return false;
+			transaction.commit();
 		} catch (Exception e) {
 			if (transaction != null) transaction.rollback();
 			
-			System.out.println("Error: couldn't delete Product Hibernate");
-			return false;
+			throw new RuntimeException("Error: couldn't delete Product Hibernate");
 		}
 	}
 
