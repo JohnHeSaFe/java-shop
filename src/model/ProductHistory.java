@@ -10,7 +10,7 @@ public class ProductHistory {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name = "is_available")
+	@Column
     private boolean available;
 	
 	@Column(name = "created_at")
@@ -19,13 +19,13 @@ public class ProductHistory {
 	@Column(name = "id_product")
     private int idProduct;
 	
-	@Column(name = "product_name")
+	@Column
     private String name;
 	
-	@Column(name = "public_price")
+	@Column(name = "price")
     private double publicPrice;
 	
-	@Column(name = "stock_count")
+	@Column(name = "stock")
     private int stock;
     
     

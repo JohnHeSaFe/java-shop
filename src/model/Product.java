@@ -8,16 +8,16 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name = "product_name")
-    private String name;
-	
-	@Column(name = "wholesaler_price")
-    private double wholesalerPrice;
-	
-	@Column(name = "available")
+	@Column
     private boolean available;
 	
-	@Column(name = "stock")
+	@Column
+    private String name;
+	
+	@Column(name = "price")
+    private double wholesalerPrice;
+	
+	@Column
     private int stock;
 	
 	@Transient
@@ -26,6 +26,7 @@ public class Product {
     @Transient
     private static int totalProducts;
     
+    @Transient
     public final static double EXPIRATION_RATE=0.60;
     
     public Product() {}
