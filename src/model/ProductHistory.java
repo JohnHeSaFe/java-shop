@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "inventory_history")
 public class ProductHistory {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,13 +33,13 @@ public class ProductHistory {
     public ProductHistory() {}
     
 
-    public ProductHistory(int idProduct, String name, double publicPrice, boolean available, int stock) {
-        this.idProduct = idProduct;
-        this.name = name;
-        this.publicPrice = publicPrice;
-        this.available = available;
-        this.stock = stock;
+    public ProductHistory(Product product) {
+        this.available = product.isAvailable();
         this.createdAt = LocalDateTime.now(); 
+        this.idProduct = product.getId();
+        this.name = product.getName();
+        this.publicPrice = product.getWholesalerPrice();
+        this.stock = product.getStock();
     }
 
     public int getId() {
@@ -65,7 +66,7 @@ public class ProductHistory {
         this.createdAt = createdAt;
     }
 
-    public double getIdProduct() {
+    public int getIdProduct() {
         return idProduct;
     }
 
@@ -99,9 +100,9 @@ public class ProductHistory {
 
     @Override
     public String toString() {
-        return "ProductHistory [id=" + id + ", idProduct=" + idProduct + ", name=" + name 
-               + ", publicPrice=" + publicPrice + ", available=" + available + ", stock=" + stock 
-               + ", createdAt=" + createdAt + "]";
+    	return "ProductHistory [id=" + id + ", idProduct=" + idProduct + ", name=" + name 
+                + ", publicPrice=" + publicPrice + ", available=" + available + ", stock=" + stock 
+                + ", createdAt=" + createdAt + "]";
     }
 
 }

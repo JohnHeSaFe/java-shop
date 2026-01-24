@@ -3,6 +3,7 @@ package model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "inventory")
 public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

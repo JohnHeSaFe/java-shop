@@ -11,11 +11,16 @@ import org.hibernate.query.Query;
 import org.hibernate.Session;
 import model.Employee;
 import model.Product;
+import model.ProductHistory;
 
 public class DaoImplHibernate implements Dao {
 	
 	private Session session;
 	private SessionFactory sessionFactory;
+	
+	public DaoImplHibernate() {
+		connect();
+	}
 	
 	@Override
 	public void connect() {
@@ -37,6 +42,7 @@ public class DaoImplHibernate implements Dao {
 	        }
 		} catch (Exception e) {
 			System.out.println("Error: couldn't open Hibernate session.");
+			e.printStackTrace();
 		}
 	}
 
@@ -75,8 +81,26 @@ public class DaoImplHibernate implements Dao {
 
 	@Override
 	public boolean writeInventory(ArrayList<Product> products) {
-		// TODO Auto-generated method stub
-		return false;
+		connect();
+		
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			
+			for (Product product : products) {
+				ProductHistory history = new ProductHistory(product);
+				session.save(history);
+			}
+			
+			transaction.commit();
+			
+			return true;
+		} catch (Exception e) {
+			if (transaction != null) transaction.rollback();
+			
+			System.out.println("Error: couldn't add products to inventory_history Hibernate");
+			return false;
+		}
 	}
 
 	@Override
@@ -127,6 +151,8 @@ public class DaoImplHibernate implements Dao {
 			
 			if (product != null) {
 				session.delete(product);
+			} else {
+				throw new RuntimeException("Error: product doesn't exist to delete");
 			}
 			
 			transaction.commit();
