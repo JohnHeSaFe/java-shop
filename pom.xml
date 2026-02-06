@@ -28,6 +28,12 @@
 	        <version>2.0.9</version>
 	        <scope>runtime</scope>
 	    </dependency>
+	    
+	    <dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongo-java-driver</artifactId>
+			<version>3.10.2</version>
+		</dependency>
 	</dependencies>
   <build>
     <sourceDirectory>src</sourceDirectory>
