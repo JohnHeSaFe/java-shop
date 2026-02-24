@@ -122,10 +122,11 @@ public class LoginView extends JFrame implements ActionListener{
 							JOptionPane.ERROR_MESSAGE);
 					// release current screen
 					dispose();
+				} catch (NumberFormatException ex) {
+					JOptionPane.showMessageDialog(null, "Número de empleado debe ser un número", "Error",
+							JOptionPane.ERROR_MESSAGE);
 				}
-				
 			}
-
 		}
 	}
 }
