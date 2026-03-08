@@ -56,7 +56,7 @@ public class DaoImplFile implements Dao {
 				String[] sections = line.split(";");
 
 				String name = "";
-				double wholesalerPrice = 0.0;
+				Amount wholesalerPrice = new Amount(0);
 				int stock = 0;
 
 				// read each sections
@@ -72,7 +72,7 @@ public class DaoImplFile implements Dao {
 
 					case 1:
 						// format price
-						wholesalerPrice = Double.parseDouble(data[1]);
+						wholesalerPrice.setValue(Double.parseDouble(data[1]));
 						break;
 
 					case 2:
