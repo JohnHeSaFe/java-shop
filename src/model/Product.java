@@ -15,8 +15,8 @@ public class Product {
 	@Column
     private String name;
 	
-	@Column(name = "price")
-    private double wholesalerPrice;
+	@Embedded
+    private Amount wholesalerPrice;
 	
 	@Column
     private int stock;
@@ -32,18 +32,18 @@ public class Product {
     
     public Product() {}
     
-	public Product(String name, double wholesalerPrice, boolean available, int stock) {
+	public Product(String name, Amount wholesalerPrice, boolean available, int stock) {
 		super();
 		this.id = totalProducts+1;
 		this.name = name;
 		this.wholesalerPrice = wholesalerPrice;
-		this.publicPrice = wholesalerPrice * 2;
+		this.publicPrice = wholesalerPrice.getValue() * 2;
 		this.available = available;
 		this.stock = stock;
 		totalProducts++;
 	}
 	
-	public Product(int id, String name, double wholesalerPrice, boolean available, int stock) {
+	public Product(int id, String name, Amount wholesalerPrice, boolean available, int stock) {
 		this(name, wholesalerPrice, available, stock);
 		this.id = id;
 	}
@@ -72,11 +72,11 @@ public class Product {
 		this.publicPrice = publicPrice;
 	}
 
-	public double getWholesalerPrice() {
+	public Amount getWholesalerPrice() {
 		return wholesalerPrice;
 	}
 
-	public void setWholesalerPrice(double wholesalerPrice) {
+	public void setWholesalerPrice(Amount wholesalerPrice) {
 		this.wholesalerPrice = wholesalerPrice;
 	}
 

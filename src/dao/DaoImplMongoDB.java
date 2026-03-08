@@ -11,6 +11,7 @@ import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 
+import model.Amount;
 import model.Employee;
 import model.Product;
 
@@ -28,9 +29,8 @@ public class DaoImplMongoDB implements Dao {
 			
 			database = mongoClient.getDatabase("shop");
 			
-			
 			createUsersCollectionWithSampleData();
-			inventoryCollection = database.getCollection("inventory");
+			createInventoryCollectionWithSampleData();
 			inventoryHistoricalCollection = database.getCollection("historical_inventory");
 		} catch (MongoException e) {
 	        System.err.println("Error al conectar con MongoDB.");
@@ -49,6 +49,34 @@ public class DaoImplMongoDB implements Dao {
 		}
 	}
 	
+	private void createInventoryCollectionWithSampleData() {
+		if (inventoryCollection == null) {
+			database.createCollection("inventory");
+			inventoryCollection = database.getCollection("inventory");
+		}
+		
+        if (inventoryCollection.countDocuments() == 0) {
+            Document applePrice = new Document("value", 10.5).append("currency", "€");
+            Document apple = new Document("_id", new ObjectId())
+                    .append("name", "Manzana")
+                    .append("wholesalerPrice", applePrice)
+                    .append("available", true)
+                    .append("stock", 10)
+                    .append("id", 1);
+
+            Document strawberryPrice = new Document("value", 5.5).append("currency", "€");
+            Document strawberry = new Document("_id", new ObjectId())
+                    .append("name", "Fresa")
+                    .append("wholesalerPrice", strawberryPrice)
+                    .append("available", true)
+                    .append("stock", 20)
+                    .append("id", 2);
+
+            inventoryCollection.insertOne(apple);
+            inventoryCollection.insertOne(strawberry);
+        }
+    }
+	
 	@Override
 	public void disconnect() {
 		if (mongoClient != null) {
@@ -58,21 +86,54 @@ public class DaoImplMongoDB implements Dao {
 
 	@Override
 	public Employee getEmployee(int employeeId, String password) {
-		connect();
-		Document query = new Document("employeeId", employeeId).append("password", password);
-		Document result = usersCollection.find(query).first();
+		if (usersCollection == null) {
+	        connect();
+	    }
 		
-		if (result != null) {
-			return new Employee(result.getInteger("employeeId"), result.getString("name"), result.getString("password"));
-		}
+		
+		try {
+			Document query = new Document("employeeId", employeeId).append("password", password);
+			Document result = usersCollection.find(query).first();
+			if (result != null) {
+				return new Employee(result.getInteger("employeeId"), result.getString("name"), result.getString("password"));
+			}
+		} catch (Exception e) {
+	        System.err.println("Error: couldn't fetch employee from MongoDB.");
+	    }
 		
 		return null;
 	}
 
 	@Override
 	public ArrayList<Product> getInventory() {
-		// TODO Auto-generated method stub
-		return null;
+	    if (inventoryCollection == null) {
+	        connect();
+	    }
+
+	    ArrayList<Product> inventory = new ArrayList<>();
+
+	    try {
+	        for (Document doc : inventoryCollection.find()) {
+	            int id = doc.getInteger("id");
+	            String name = doc.getString("name");
+	            int stock = doc.getInteger("stock");
+	            boolean available = doc.getBoolean("available");
+
+	            Document wholesalerPriceDoc = (Document) doc.get("wholesalerPrice");
+	            double priceValue = ((Number) wholesalerPriceDoc.get("value")).doubleValue();
+	            String currency = wholesalerPriceDoc.getString("currency");
+	            Amount wholesalerPrice = new Amount(priceValue);
+	            wholesalerPrice.setCurrency(currency);
+
+	            Product product = new Product(id, name, wholesalerPrice, available, stock);
+	            
+	            inventory.add(product);
+	        }
+	    } catch (Exception e) {
+	        System.err.println("Error: couldn't fetch inventory from MongoDB.");
+	    }
+
+	    return inventory;
 	}
 
 	@Override

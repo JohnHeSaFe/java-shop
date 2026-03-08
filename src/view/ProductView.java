@@ -167,13 +167,13 @@ public class ProductView extends JDialog implements ActionListener{
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					Double productPrice;
+					Amount productPrice;
 					int productStock;
 					try {
-						productPrice = Double.parseDouble(textFieldPrice.getText());
+						productPrice = new Amount(Double.parseDouble(textFieldPrice.getText()));
 						productStock = Integer.parseInt(textFieldStock.getText());
 						
-						if (productPrice < 0) {
+						if (productPrice.getValue() < 0) {
 							JOptionPane.showMessageDialog(null, "Producto no puede tener precio negativo ", "Error",
 									JOptionPane.ERROR_MESSAGE);
 							return;

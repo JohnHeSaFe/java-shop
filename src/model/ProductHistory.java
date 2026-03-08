@@ -23,8 +23,8 @@ public class ProductHistory {
 	@Column
     private String name;
 	
-	@Column(name = "price")
-    private double publicPrice;
+	@Embedded
+    private Amount wholesalerPrice;
 	
 	@Column(name = "stock")
     private int stock;
@@ -38,7 +38,7 @@ public class ProductHistory {
         this.createdAt = LocalDateTime.now(); 
         this.idProduct = product.getId();
         this.name = product.getName();
-        this.publicPrice = product.getWholesalerPrice();
+        this.wholesalerPrice = product.getWholesalerPrice();
         this.stock = product.getStock();
     }
 
@@ -82,12 +82,12 @@ public class ProductHistory {
         this.name = name;
     }
 
-    public double getPublicPrice() {
-        return publicPrice;
+    public Amount getPublicPrice() {
+        return wholesalerPrice;
     }
 
-    public void setPublicPrice(double publicPrice) {
-        this.publicPrice = publicPrice;
+    public void setPublicPrice(Amount publicPrice) {
+        this.wholesalerPrice = publicPrice;
     }
 
     public int getStock() {
@@ -101,7 +101,7 @@ public class ProductHistory {
     @Override
     public String toString() {
     	return "ProductHistory [id=" + id + ", idProduct=" + idProduct + ", name=" + name 
-                + ", publicPrice=" + publicPrice + ", available=" + available + ", stock=" + stock 
+                + ", publicPrice=" + wholesalerPrice + ", available=" + available + ", stock=" + stock 
                 + ", createdAt=" + createdAt + "]";
     }
 

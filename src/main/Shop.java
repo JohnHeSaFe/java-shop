@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import dao.DaoImplHibernate;
+import dao.DaoImplMongoDB;
 import dao.Dao;
 
 public class Shop {
@@ -27,7 +28,7 @@ public class Shop {
 	private int numberSales;
 	final static double TAX_RATE = 1.04;
 	
-	Dao dao = new DaoImplHibernate();
+	Dao dao = new DaoImplMongoDB();
 	
 
 	public Shop() {
@@ -245,7 +246,7 @@ public class Shop {
 		System.out.print("Nombre: ");
 		String name = scanner.nextLine();
 		System.out.print("Precio mayorista: ");
-		double wholesalerPrice = scanner.nextDouble();
+		Amount wholesalerPrice = new Amount(scanner.nextDouble());
 		System.out.print("Stock: ");
 		int stock = scanner.nextInt();
 

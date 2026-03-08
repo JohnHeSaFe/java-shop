@@ -1,12 +1,20 @@
 package model;
 
 import java.text.DecimalFormat;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 
+@Embeddable
 public class Amount {
+	@Column(name = "price")
 	private double value;	
+	@Column(name = "currency")
 	private String currency="€";
 	
 	private static final DecimalFormat df = new DecimalFormat("0.00");
+	
+	public Amount() {
+	}
 	
 	public Amount(double value) {
 		super();
@@ -19,6 +27,10 @@ public class Amount {
 
 	public void setValue(double value) {
 		this.value = value;
+	}
+	
+	public void setCurrency(String currency) {
+		this.currency = currency;
 	}
 
 	@Override
