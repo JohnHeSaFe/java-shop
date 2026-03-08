@@ -10,6 +10,8 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 import org.bson.types.ObjectId;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 
 import model.Amount;
 import model.Employee;
@@ -179,21 +181,62 @@ public class DaoImplMongoDB implements Dao {
 	}
 
 	@Override
-	public void addProduct(Product product) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void addProduct(Product product) {
+        if (inventoryCollection == null) {
+            connect();
+        }
+        try {
+            Document wholesalerPriceDoc = new Document("value", product.getWholesalerPrice().getValue())
+                    .append("currency", product.getWholesalerPrice().getCurrency());
 
-	@Override
-	public void updateProduct(Product product) {
-		// TODO Auto-generated method stub
-		
-	}
+            Document doc = new Document("name", product.getName())
+                    .append("wholesalerPrice", wholesalerPriceDoc)
+                    .append("available", product.isAvailable())
+                    .append("stock", product.getStock())
+                    .append("id", product.getId());
 
-	@Override
-	public void deleteProduct(int id) {
-		// TODO Auto-generated method stub
-		
-	}
+            inventoryCollection.insertOne(doc);
+        } catch (Exception e) {
+        	System.err.println("Error: couldn't add product in MongoDB.");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void updateProduct(Product product) {
+        if (inventoryCollection == null) {
+            connect();
+        }
+        try {
+            Document wholesalerPriceDoc = new Document("value", product.getWholesalerPrice().getValue())
+                    .append("currency", product.getWholesalerPrice().getCurrency());
+
+            inventoryCollection.updateOne(
+                Filters.eq("id", product.getId()),
+                Updates.combine(
+                    Updates.set("name", product.getName()),
+                    Updates.set("wholesalerPrice", wholesalerPriceDoc),
+                    Updates.set("available", product.isAvailable()),
+                    Updates.set("stock", product.getStock())
+                )
+            );
+        } catch (Exception e) {
+            System.err.println("Error: couldn't update product in MongoDB.");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteProduct(int id) {
+        if (inventoryCollection == null) {
+            connect();
+        }
+        try {
+            inventoryCollection.deleteOne(Filters.eq("id", id));
+        } catch (Exception e) {
+            System.err.println("Error: couldn't delete product in MongoDB.");
+            e.printStackTrace();
+        }
+    }
 
 }
