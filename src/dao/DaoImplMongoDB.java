@@ -81,6 +81,12 @@ public class DaoImplMongoDB implements Dao {
 	public void disconnect() {
 		if (mongoClient != null) {
 			mongoClient.close();
+			
+			mongoClient = null;
+	        database = null;
+	        usersCollection = null;
+	        inventoryCollection = null;
+	        inventoryHistoricalCollection = null;
 		}
 	}
 
@@ -138,8 +144,38 @@ public class DaoImplMongoDB implements Dao {
 
 	@Override
 	public boolean writeInventory(ArrayList<Product> products) {
-		// TODO Auto-generated method stub
-		return false;
+	    if (inventoryHistoricalCollection == null) {
+	        connect();
+	    }
+
+	    try {
+	        java.util.List<Document> documents = new ArrayList<>();
+	        
+	        java.util.Date createdAt = new java.util.Date(); 
+
+	        for (Product product : products) {
+	            Document wholesalerPriceDoc = new Document("value", product.getWholesalerPrice().getValue())
+	                                     .append("currency", product.getWholesalerPrice().getCurrency());
+
+	            Document doc = new Document("id", product.getId())
+	                    .append("name", product.getName())
+	                    .append("wholesalerPrice", wholesalerPriceDoc)
+	                    .append("available", product.isAvailable())
+	                    .append("stock", product.getStock())
+	                    .append("created_at", createdAt); 
+
+	            documents.add(doc);
+	        }
+
+	        if (!documents.isEmpty()) {
+	            inventoryHistoricalCollection.insertMany(documents);
+	        }
+	        
+	        return true;
+	    } catch (Exception e) {
+	        System.err.println("Error: couldn't export inventory in MongoDB.");
+	        return false;
+	    }
 	}
 
 	@Override
